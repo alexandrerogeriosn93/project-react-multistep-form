@@ -1,16 +1,33 @@
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import { FiSend } from "react-icons/fi";
+
 import ReviewForm from "./components/ReviewForm";
 import Steps from "./components/Steps";
 import UserForm from "./components/UserForm";
 import Thanks from "./components/Thanks";
 
 import { useForm } from "./hooks/useForm";
+import { useState } from "react";
 
 import "./App.css";
 
+const formTemplate = { name: "", email: "", review: "", comment: "" };
+
 function App() {
-  const formComponents = [<UserForm />, <ReviewForm />, <Thanks />];
+  const [data, setData] = useState(formTemplate);
+
+  const updateFieldHandler = (key, value) => {
+    setData((prev) => {
+      return { ...prev, [key]: value };
+    });
+  };
+
+  const formComponents = [
+    <UserForm key={0} data={data} updateFieldHandler={updateFieldHandler} />,
+    <ReviewForm key={1} data={data} updateFieldHandler={updateFieldHandler} />,
+    <Thanks key={2} data={data} />,
+  ];
+
   const { currentStep, currentComponent, changeStep, isFirstStep, isLastStep } =
     useForm(formComponents);
 
